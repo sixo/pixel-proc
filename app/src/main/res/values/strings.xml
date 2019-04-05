@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PixelProc</string>
+
+    <string name="cb_show_histo">Show histogram</string>
+    <string name="radio_kotlin">Kotlin</string>
+    <string name="radio_cpp">C++</string>
+    <string name="radio_neon">Neon</string>
+
+    <string name="err_storage_permission">You won\'t be able to access images in external storage!</string>
+
+
+</resources>
