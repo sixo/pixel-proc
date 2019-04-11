@@ -23,21 +23,30 @@ import android.widget.Toast
 import android.provider.MediaStore
 import android.R.attr.data
 import android.net.Uri
+import android.renderscript.RenderScript
 
 
 class MainActivity : AppCompatActivity() {
 
     var uri: Uri? = null
+    lateinit var rs: RenderScript
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        rs = RenderScript.create(applicationContext)
 
         if (savedInstanceState != null) {
             uri = savedInstanceState?.getParcelable(KEY_URI)
         }
 
         initView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        rs.destroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -91,7 +100,9 @@ class MainActivity : AppCompatActivity() {
     private fun loadHistogram(bitmap: Bitmap) {
         // Select implementation for generating histogram values
 //        val (r, g, b, l) = Histogram(bitmap).run { generateKotlin() }
-        val (r, g, b, l) = Histogram(bitmap).run { generateCpp() }
+//        val (r, g, b, l) = Histogram(bitmap).run { generateCpp() }
+        val (r, g, b, l) = Histogram(bitmap, rs).run { generateRs() }
+
 
         histoView.apply {
             reds = r

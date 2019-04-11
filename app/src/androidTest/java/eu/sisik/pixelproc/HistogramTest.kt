@@ -2,10 +2,12 @@ package eu.sisik.pixelproc
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.renderscript.RenderScript
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import android.util.Log
 import eu.sisik.pixelproc.histo.Histogram
+import java_eu_sisik_pixelproc_histo.ScriptC_histo
 import junit.framework.TestCase.*
 import org.junit.*
 import org.junit.runner.RunWith
@@ -63,6 +65,30 @@ class HistogramTest {
     fun generateCppNormalized() {
         val histogram = Histogram(bitmap)
         val (r, g, b, l) = histogram.generateCpp(true)
+
+        Assert.assertArrayEquals(RED_NORM, r)
+        Assert.assertArrayEquals(GREEN_NORM, g)
+        Assert.assertArrayEquals(BLUE_NORM, b)
+        Assert.assertArrayEquals(LUMA_NORM, l)
+    }
+
+    @Test
+    fun generateRs() {
+        val rs = RenderScript.create(InstrumentationRegistry.getTargetContext())
+        val histogram = Histogram(bitmap, rs)
+        val (r, g, b, l) = histogram.generateRs(false)
+
+        Assert.assertArrayEquals(RED, r)
+        Assert.assertArrayEquals(GREEN, g)
+        Assert.assertArrayEquals(BLUE, b)
+        Assert.assertArrayEquals(LUMA, l)
+    }
+
+    @Test
+    fun generateRsNormalized() {
+        val rs = RenderScript.create(InstrumentationRegistry.getTargetContext())
+        val histogram = Histogram(bitmap, rs)
+        val (r, g, b, l) = histogram.generateRs(true)
 
         Assert.assertArrayEquals(RED_NORM, r)
         Assert.assertArrayEquals(GREEN_NORM, g)
